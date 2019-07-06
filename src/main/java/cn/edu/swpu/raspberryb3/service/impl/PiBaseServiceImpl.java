@@ -14,34 +14,37 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class PiBaseServiceImpl implements PiBaseService {
 
-    @Autowired
-    private GpioController gpioController;
-
-    @Autowired
     private GpioPinDigitalOutput led;
 
-    @Autowired
     private GpioPinDigitalOutput buzzer;
+    
+    @Autowired
+    public PiBaseServiceImpl(GpioController gpioController){
+        led = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_01,"led", PinState.LOW);
+        buzzer = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_03,"buzzer", PinState.LOW);
+    }
+
+
 
     @Override
-    public int turnOnLight() {
-        GpioPinDigitalOutput output = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_01,"led", PinState.LOW);
-
-        return 0;
+    public boolean turnOnLight() {
+        led.high();
+        return led.isHigh();
     }
 
     @Override
-    public int turnOffLight() {
-        return 0;
+    public boolean turnOffLight() {
+        led.low();
+        return led.isLow();
     }
 
     @Override
-    public int turnOnBuzzer() {
-        return 0;
+    public boolean turnOnBuzzer() {
+        return true;
     }
 
     @Override
-    public int turnOffBuzzer() {
-        return 0;
+    public boolean turnOffBuzzer() {
+        return true;
     }
 }

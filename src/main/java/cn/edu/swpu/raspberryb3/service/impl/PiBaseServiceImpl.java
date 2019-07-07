@@ -32,8 +32,6 @@ public class PiBaseServiceImpl implements PiBaseService {
 
     @Override
     public int turnOffLight() {
-
-        System.out.println("ddd");
         return 0;
     }
 

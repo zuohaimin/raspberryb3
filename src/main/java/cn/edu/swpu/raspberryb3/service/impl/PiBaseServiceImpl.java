@@ -1,5 +1,6 @@
 package cn.edu.swpu.raspberryb3.service.impl;
 
+import cn.edu.swpu.raspberryb3.constant.RaspberryConstant;
 import cn.edu.swpu.raspberryb3.service.PiBaseService;
 import com.pi4j.io.gpio.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,13 @@ public class PiBaseServiceImpl implements PiBaseService {
     }
 
     /**
-     * 打开蜂鸣器，
+     * 打开蜂鸣器，rate = 100
      * @return
      */
     @Override
     public boolean turnOnBuzzer() {
-        buzzer.setPwm(100);
-        return buzzer.getPwm() == 100;
+        buzzer.setPwm(RaspberryConstant.BUZZER_RATE);
+        return buzzer.getPwm() == RaspberryConstant.BUZZER_RATE;
     }
 
     @Override

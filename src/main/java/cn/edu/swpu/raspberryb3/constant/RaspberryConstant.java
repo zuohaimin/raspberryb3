@@ -7,5 +7,5 @@ package cn.edu.swpu.raspberryb3.constant;
  */
 public class RaspberryConstant {
 
-    public static final int LED_LENGTH  = 1;
+    public static final int BUZZER_RATE  = 1;
 }

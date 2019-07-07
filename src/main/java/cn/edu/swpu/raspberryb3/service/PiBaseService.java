@@ -7,12 +7,12 @@ package cn.edu.swpu.raspberryb3.service;
  */
 public interface PiBaseService {
 
-    int turnOnLight();
+    boolean turnOnLight();
 
-    int turnOffLight();
+    boolean turnOffLight();
 
-    int turnOnBuzzer();
+    boolean turnOnBuzzer();
 
-    int turnOffBuzzer();
+    boolean turnOffBuzzer();
 
 }

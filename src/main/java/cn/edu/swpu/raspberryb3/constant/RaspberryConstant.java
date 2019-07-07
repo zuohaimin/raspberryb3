@@ -8,4 +8,6 @@ package cn.edu.swpu.raspberryb3.constant;
 public class RaspberryConstant {
 
     public static final int BUZZER_RATE  = 1;
+
+    public static final String MOBILE_NUM = "15228318140";
 }

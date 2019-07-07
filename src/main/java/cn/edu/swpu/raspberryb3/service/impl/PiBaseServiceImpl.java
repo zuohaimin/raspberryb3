@@ -1,50 +1,62 @@
 package cn.edu.swpu.raspberryb3.service.impl;
 
 import cn.edu.swpu.raspberryb3.service.PiBaseService;
-import com.pi4j.io.gpio.GpioController;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @Author: 束手就擒
  * @Date: 19-7-3 下午9:58
  * @Description:
+ *
+ * buzzer: 无源蜂鸣器需要pwm,支持PWM的引脚23/24/26/01
  */
 public class PiBaseServiceImpl implements PiBaseService {
 
     private GpioPinDigitalOutput led;
 
-    private GpioPinDigitalOutput buzzer;
+    private GpioPinPwmOutput buzzer;
     
     @Autowired
-    public PiBaseServiceImpl(GpioController gpioController){
-        led = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_01,"led", PinState.LOW);
-        buzzer = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_03,"buzzer", PinState.LOW);
+    public PiBaseServiceImpl(GpioController gpioController) {
+        led = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_00, "led", PinState.LOW);
+        buzzer = gpioController.provisionPwmOutputPin(RaspiPin.GPIO_23, "buzzer");
     }
 
 
-
+    /**
+     * 开灯
+     * @return
+     */
     @Override
     public boolean turnOnLight() {
         led.high();
         return led.isHigh();
     }
 
+    /**
+     * 关灯
+     * @return
+     */
     @Override
     public boolean turnOffLight() {
         led.low();
         return led.isLow();
     }
 
+    /**
+     * 打开蜂鸣器，
+     * @return
+     */
     @Override
     public boolean turnOnBuzzer() {
-        return true;
+        buzzer.setPwm(100);
+        return buzzer.getPwm() == 100;
     }
 
     @Override
     public boolean turnOffBuzzer() {
-        return true;
+        buzzer.setPwm(0);
+        return buzzer.getPwm() == 0;
     }
 }

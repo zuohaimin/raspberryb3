@@ -4,6 +4,7 @@ import cn.edu.swpu.raspberryb3.constant.RaspberryConstant;
 import cn.edu.swpu.raspberryb3.service.PiBaseService;
 import com.pi4j.io.gpio.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author: 束手就擒
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * buzzer: 无源蜂鸣器需要pwm,支持PWM的引脚23/24/26/01
  */
+@Service
 public class PiBaseServiceImpl implements PiBaseService {
 
     private GpioPinDigitalOutput led;

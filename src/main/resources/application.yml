@@ -1,1 +1,7 @@
+#发送提醒短信电话号码， list
+to:
+  -15228318140
+spring:
+  profiles:
+    active: dev
 

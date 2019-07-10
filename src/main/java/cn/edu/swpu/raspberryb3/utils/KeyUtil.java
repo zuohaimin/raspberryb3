@@ -1,7 +1,5 @@
 package cn.edu.swpu.raspberryb3.utils;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -21,5 +19,4 @@ public class KeyUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH");
         return formatter.format(LocalDateTime.now());
     }
-
 }

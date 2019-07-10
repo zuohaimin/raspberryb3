@@ -9,6 +9,7 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.Trigger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,18 +44,22 @@ public class PiGasServiceImpl implements PiGasService{
      */
     @Override
     public void getEdge() {
-        digitalInput.setShutdownOptions(true);
+        digitalInput.setDebounce(200);
         digitalInput.addListener(new GpioPinListenerDigital() {
             @Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-                if (PinState.LOW.equals(event.getState())){
-                    piBaseService.turnOnBuzzer();
-                    SmsSender.sendSms(to);
-                    log.info("[气体传感器] 感受到异常，已经发送短信，注意安全！ GasPinState={}",event.getState());
-                }else {
-                    piBaseService.turnOffBuzzer();
-                    log.info("[气体传感器] 状态变化 GasPinState={}",event.getState());
+                log.info("[气体传感器] 感受到异常，已经发送短信，注意安全！ GasPinState={}",event.getState());
+                piBaseService.turnOnBuzzer();
+                piBaseService.turnOnFirst();
+                SmsSender.sendSms(to);
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                piBaseService.turnOffFirst();
+                piBaseService.turnOffBuzzer();
             }
         });
     }

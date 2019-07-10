@@ -1,5 +1,6 @@
 package cn.edu.swpu.raspberryb3.service.impl;
 
+import cn.edu.swpu.raspberryb3.service.PiBaseService;
 import cn.edu.swpu.raspberryb3.service.PiVoiceService;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -15,18 +16,20 @@ import java.util.Map;
  * @Author: 束手就擒
  * @Date: 19-7-10 下午6:27
  * @Description:
+ * 有效信号为低电平
  */
 @Slf4j
 public class PiVoiceServiceImpl implements PiVoiceService {
 
     private GpioPinDigitalInput voiceSenser;
 
-    private GpioPinDigitalOutput ledSecond;
+    private PiBaseService piBaseService;
 
     @Autowired
-    public PiVoiceServiceImpl(Map<String,RaspiPin> gpioPinMap){
+    public PiVoiceServiceImpl(Map<String,RaspiPin> gpioPinMap,
+                              PiBaseService piBaseService){
         this.voiceSenser = (GpioPinDigitalInput) gpioPinMap.get("voiceSenser");
-        this.ledSecond = (GpioPinDigitalOutput) gpioPinMap.get("ledSecond");
+        this.piBaseService = piBaseService;
     }
     @Override
     public void getEdge() {
@@ -37,13 +40,13 @@ public class PiVoiceServiceImpl implements PiVoiceService {
             @Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
                 log.info(event.getPin()+ " : " + event.getState());
-                ledSecond.high();
+                piBaseService.turnOnSecond();
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                ledSecond.low();
+                piBaseService.turnOffSecond();
             }
         });
         

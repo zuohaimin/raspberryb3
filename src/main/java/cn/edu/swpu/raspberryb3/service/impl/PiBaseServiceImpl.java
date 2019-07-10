@@ -6,6 +6,8 @@ import com.pi4j.io.gpio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @Author: 束手就擒
  * @Date: 19-7-3 下午9:58
@@ -16,14 +18,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class PiBaseServiceImpl implements PiBaseService {
 
-    private GpioPinDigitalOutput led;
+    private GpioPinDigitalOutput ledFirst;
+
+    private GpioPinDigitalOutput ledSecond;
 
     private GpioPinPwmOutput buzzer;
     
     @Autowired
-    public PiBaseServiceImpl(GpioController gpioController) {
-        led = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_00, "led", PinState.LOW);
-        buzzer = gpioController.provisionPwmOutputPin(RaspiPin.GPIO_23, "buzzer");
+    public PiBaseServiceImpl(Map<String,GpioPin> gpioPinMap) {
+        this.ledFirst = (GpioPinDigitalOutput)gpioPinMap.get("led_1");
+        this.ledSecond = (GpioPinDigitalOutput)gpioPinMap.get("led_2");
+        this.buzzer = (GpioPinPwmOutput)gpioPinMap.get("buzzer");
     }
 
 
@@ -32,19 +37,28 @@ public class PiBaseServiceImpl implements PiBaseService {
      * @return
      */
     @Override
-    public boolean turnOnLight() {
-        led.high();
-        return led.isHigh();
+    public boolean turnOnFirst() {
+        ledFirst.high();
+        return ledSecond.isHigh();
     }
 
-    /**
-     * 关灯
-     * @return
-     */
     @Override
-    public boolean turnOffLight() {
-        led.low();
-        return led.isLow();
+    public boolean turnOnSecond() {
+
+        ledSecond.high();
+        return ledSecond.isHigh();
+    }
+
+    @Override
+    public boolean turnOffSecond() {
+        ledSecond.low();
+        return ledSecond.isLow();
+    }
+
+    @Override
+    public boolean turnOffFirst() {
+        ledFirst.low();
+        return ledFirst.isLow();
     }
 
     /**

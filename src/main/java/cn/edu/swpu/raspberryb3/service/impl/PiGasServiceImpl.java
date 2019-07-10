@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: 束手就擒
@@ -29,9 +30,9 @@ public class PiGasServiceImpl implements PiGasService{
     private PiBaseService piBaseService;
 
     @Autowired
-    public PiGasServiceImpl(GpioController controller,
+    public PiGasServiceImpl(Map<String,GpioPin> gpioPinMap,
                             PiBaseService piBaseService){
-        this.digitalInput = controller.provisionDigitalInputPin(RaspiPin.GPIO_01, PinPullResistance.PULL_DOWN);
+        this.digitalInput = (GpioPinDigitalInput) gpioPinMap.get("gasSenser");
         this.piBaseService = piBaseService;
     }
 

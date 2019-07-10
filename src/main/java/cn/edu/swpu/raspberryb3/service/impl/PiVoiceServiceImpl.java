@@ -49,6 +49,5 @@ public class PiVoiceServiceImpl implements PiVoiceService {
                 piBaseService.turnOffSecond();
             }
         });
-        
     }
 }

@@ -23,7 +23,7 @@ public class PiBaseServiceImpl implements PiBaseService {
     private GpioPinDigitalOutput ledSecond;
 
     private GpioPinPwmOutput buzzer;
-    
+
     @Autowired
     public PiBaseServiceImpl(Map<String,GpioPin> gpioPinMap) {
         this.ledFirst = (GpioPinDigitalOutput)gpioPinMap.get("led_1");

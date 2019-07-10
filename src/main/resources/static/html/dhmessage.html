@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DHMessage</title>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+    <script src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+</head>
+<body>
+<h1 align="center">物联网综合实践</h1>
+<div>
+    <div id="main" style="width: 100%; height:800px; float: left;"></div>
+</div>
+<button id="save">开始采集温湿度</button>
+<button id="change">动态显示存储数量</button>
+<script type="text/javascript">
+    $("#save").click(function () {
+        $.getJSON("/raspberry3/collectdhmessage", function (data) {
+            if (data.status == "success") {
+                $("#save").text("正在存储数据");
+            } else {
+                $.toast("请不要多次存储");
+            }
+        })
+    });
+
+    var humidity= new Array();
+    var temperature= new Array();
+    var time = new Array();
+    $("#change").click(function () {
+        myChart.showLoading({
+            text:"正在加载数据"
+        });
+        setInterval(start, 10000);
+    });
+
+    var myChart = echarts.init(document.getElementById('main'));
+    var mainOption = {
+        title: {
+            text: '温湿度曲线'
+        },
+        tooltip: {},
+        legend: {
+            data:['温度', '湿度']
+        },
+        xAxis: {
+            name:"时间",
+            data: time
+        },
+        yAxis: {
+            name : "温湿度",
+            type : "value"
+        },
+        series: [
+        {
+            name: '温度',
+            type: 'line',
+            data: temperature
+        },
+        {
+            name: "湿度",
+            type: "line",
+            data: humidity
+        }]
+    };
+    function setchart(humidity, temperature, time) {
+
+        var option = {
+            xAxis: {
+                data: time
+            },
+            yAxis: {},
+            series: [
+            {
+                name: '温度',
+                type: 'line',
+                data: temperature
+            },
+            {
+                name: "湿度",
+                type: "line",
+                data: humidity
+            }]
+        };
+        myChart.setOption(option);
+    }
+    myChart.setOption(mainOption);
+    function start() {
+
+        $.ajax({url:"/raspberry3/dhmessage",
+            type:"get",
+            datatype:"json",
+            success:function (result) {
+                myChart.hideLoading();
+                if (humidity.length >= 10) {
+                    humidity.shift();
+                    temperature.shift();
+                    time.shift();
+                }
+                humidity.push(result.humidity);
+                temperature.push(result.temperature);
+                time.push(result.time);
+                setchart(humidity, temperature, time);
+            }});
+    }
+</script>
+
+</body>
+</html>

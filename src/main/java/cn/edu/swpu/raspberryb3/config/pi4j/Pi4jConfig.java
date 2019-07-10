@@ -25,7 +25,6 @@ public class Pi4jConfig {
     @Bean
     public GpioController gpioController(){
         return GpioFactory.getInstance();
-
     }
 
     /**

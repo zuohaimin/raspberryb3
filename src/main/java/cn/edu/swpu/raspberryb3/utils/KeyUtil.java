@@ -12,8 +12,13 @@ import java.time.format.DateTimeFormatter;
  */
 public class KeyUtil {
 
-    public static synchronized String genRedisKey(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static synchronized String genDHMessageTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+        return formatter.format(LocalDateTime.now());
+    }
+
+    public static synchronized String getRedisKey(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH");
         return formatter.format(LocalDateTime.now());
     }
 

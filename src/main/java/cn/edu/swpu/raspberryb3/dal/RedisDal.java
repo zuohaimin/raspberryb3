@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: 束手就擒
  * @Date: 19-7-8 下午5:09
  * @Description:
+ * 将DHMessage(温湿度传感器记录)放在list里面，每次leftPop()即可以得到最新的消息
  */
 @Component
 public class RedisDal {
@@ -24,21 +25,13 @@ public class RedisDal {
 
 
 
-    public DHMessage save(DHMessage dhMessage){
-        String key = KeyUtil.genRedisKey();
-        redisTemplate.opsForValue().set(key,dhMessage);
-        return getDHMessage(key);
-    }
-
     /**
-     * 保存一个会过期的记录
      * @param dhMessage
-     * @param time
      * @return
      */
-    public DHMessage save(DHMessage dhMessage, long time){
-        String key = KeyUtil.genRedisKey();
-        redisTemplate.opsForValue().set(key,dhMessage,time, TimeUnit.SECONDS);
+    public DHMessage save(DHMessage dhMessage){
+        String key = KeyUtil.getRedisKey();
+        redisTemplate.opsForList().leftPush(key,dhMessage);
         return getDHMessage(key);
     }
 
@@ -47,12 +40,6 @@ public class RedisDal {
     }
 
     public DHMessage getDHMessage(String key){
-        return redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForList().leftPop(key);
     }
-
-    public DHMessage update(String key, DHMessage dhMessage){
-        redisTemplate.opsForValue().set(key,dhMessage);
-        return getDHMessage(key);
-    }
-
 }

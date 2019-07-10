@@ -12,60 +12,11 @@
 <body>
 <h1 align="center">物联网综合实践</h1>
 <div>
-    <div id="main" style="width: 63%; height:60%; float: left;"></div>
-    <div id="right" style="width: 35%; height:60%; float: right;"></div>
+    <div id="main" style="width: 100%; height:800px; float: left;"></div>
 </div>
 <button id="save">开始采集温湿度</button>
 <button id="change">动态显示存储数量</button>
 <script type="text/javascript">
-    var rightChart = echarts.init(document.getElementById('right'));
-    rightChart.showLoading({
-        text:"正在加载数据"
-    });
-    function setchartRight(localPort, data) {
-
-        var option = {
-            title: {
-                text: '本地端口前十分布图'
-            },
-            tooltip: {},
-            legend: {
-                data:['端口数量']
-            },
-            xAxis: {
-                name:"端口号",
-                data: localPort
-            },
-            yAxis: {
-                name:"端口数量"
-            },
-            series: [{
-                name: '端口数量',
-                type: 'bar',
-                data: data
-            }]
-        };
-        rightChart.setOption(option);
-    }
-    function startRight() {
-        var localPort = new Array();
-        var data = new Array();
-        $.ajax({url:"/show",
-            type:"get",
-            datatype:"json",
-            success:function (result) {
-                rightChart.hideLoading();
-                $.each(result, function (index, obj) {
-                    localPort[index] = obj['localPort'];
-                    data[index] = obj['port'];
-                });
-                setchartRight(localPort, data);
-            }});
-    }
-    startRight();
-
-
-
     $("#save").click(function () {
         $.getJSON("/raspberry3/collectdhmessage", function (data) {
             if (data.status == "success") {
@@ -76,12 +27,9 @@
         })
     });
 
-
-
-
-
     var humidity= new Array();
     var temperature= new Array();
+    var time = new Array();
     $("#change").click(function () {
         myChart.showLoading({
             text:"正在加载数据"
@@ -90,43 +38,70 @@
     });
 
     var myChart = echarts.init(document.getElementById('main'));
-    var leftOption = {
+    var mainOption = {
         title: {
-            text: '动态存储信息'
+            text: '温湿度曲线'
         },
         tooltip: {},
         legend: {
-            data:['存储数量']
+            data:['温度', '湿度']
         },
         xAxis: {
-            name:"存储时间",
-            data: dateTime
+            name:"时间",
+            data: time
         },
         yAxis: {
-            name:"存储数量"
+            name : "温湿度",
+            type : "value"
         },
-        series: [{
-            name: '存储数量',
+        series: [
+        {
+            name: '温度',
             type: 'line',
-            data: count
+            data: temperature
+        },
+        {
+            name: "湿度",
+            type: "line",
+            data: humidity
         }]
     };
-    function setchart(dateTime, count) {
+    function setchart(humidity, temperature, time) {
 
         var option = {
             xAxis: {
-                data: dateTime
+                data: time
             },
             yAxis: {},
-            series: [{
-                name: '存储数量',
+            series: [
+            {
+                name: '温度',
                 type: 'line',
-                data: count
+                data: temperature
+            },
+            {
+                name: "湿度",
+                type: "line",
+                data: humidity
             }]
         };
         myChart.setOption(option);
     }
-    myChart.setOption(leftOption);
+    myChart.setOption(mainOption);
+    // setInterval(test, 5000);
+    //
+    //
+    // function test() {
+    //     if (humidity.length >= 10) {
+    //         humidity.shift();
+    //         temperature.shift();
+    //         time.shift();
+    //     }
+    //     humidity.push(Math.random() * 10);
+    //     temperature.push(Math.random() * 10);
+    //     time.push(Math.random() * 10);
+    //     setchart(humidity, temperature, time);
+    // }
     function start() {
 
         $.ajax({url:"/raspberry3/dhmessage",
@@ -134,12 +109,15 @@
             datatype:"json",
             success:function (result) {
                 myChart.hideLoading();
-                for (var DHMessage in result) {
-                    humidity.push(DHMessage.hu)
+                if (humidity.length >= 10) {
+                    humidity.shift();
+                    temperature.shift();
+                    time.shift();
                 }
-                count.push(result.count);
-                dateTime.push(result.time);
-                setchart(dateTime, count);
+                humidity.push(result.humidity);
+                temperature.push(result.temperature);
+                time.push(result.time);
+                setchart(humidity, temperature, time);
             }});
     }
 </script>

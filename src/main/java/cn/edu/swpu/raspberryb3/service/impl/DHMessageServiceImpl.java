@@ -3,12 +3,11 @@ package cn.edu.swpu.raspberryb3.service.impl;
 import cn.edu.swpu.raspberryb3.dal.RedisDal;
 import cn.edu.swpu.raspberryb3.entitys.DHMessage;
 import cn.edu.swpu.raspberryb3.service.DHMessageService;
+import cn.edu.swpu.raspberryb3.utils.KeyUtil;
 import com.pi4j.io.gpio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -29,9 +28,8 @@ class DHMessageServiceImpl implements DHMessageService {
      * @return
      */
     @Override
-    public List<Map<String, DHMessage>> getDHMessage() {
-
-        return null;
+    public DHMessage getDHMessage() {
+        return redisDal.getDHMessage(KeyUtil.getRedisKey());
     }
 
     @Override

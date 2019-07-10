@@ -46,6 +46,5 @@ public class PiVoiceServiceImpl implements PiVoiceService {
                 ledSecond.low();
             }
         });
-        
     }
 }

@@ -19,7 +19,7 @@ public class DHMessageController {
     private DHMessageService dhMessageService;
 
     @RequestMapping(value = "/dhmessage", method = RequestMethod.GET)
-    private List<Map<String, DHMessage>> getTemperature() throws InterruptedException {
+    private DHMessage getTemperature() throws InterruptedException {
         return dhMessageService.getDHMessage();
     }
 

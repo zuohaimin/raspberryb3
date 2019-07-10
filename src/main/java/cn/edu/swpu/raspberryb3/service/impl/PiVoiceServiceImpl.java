@@ -8,6 +8,7 @@ import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import java.util.Map;
  * @Description:
  */
 @Slf4j
+@Service
 public class PiVoiceServiceImpl implements PiVoiceService {
 
     private GpioPinDigitalInput voiceSenser;

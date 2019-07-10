@@ -88,20 +88,6 @@
         myChart.setOption(option);
     }
     myChart.setOption(mainOption);
-    // setInterval(test, 5000);
-    //
-    //
-    // function test() {
-    //     if (humidity.length >= 10) {
-    //         humidity.shift();
-    //         temperature.shift();
-    //         time.shift();
-    //     }
-    //     humidity.push(Math.random() * 10);
-    //     temperature.push(Math.random() * 10);
-    //     time.push(Math.random() * 10);
-    //     setchart(humidity, temperature, time);
-    // }
     function start() {
 
         $.ajax({url:"/raspberry3/dhmessage",

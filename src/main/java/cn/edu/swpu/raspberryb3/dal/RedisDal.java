@@ -55,5 +55,4 @@ public class RedisDal {
         return getDHMessage(key);
     }
 
-
 }

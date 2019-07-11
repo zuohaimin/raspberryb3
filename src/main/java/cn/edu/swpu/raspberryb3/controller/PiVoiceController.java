@@ -40,6 +40,7 @@ public class PiVoiceController {
 
     @RequestMapping(value = "/turnOffSecond", method = RequestMethod.GET)
     private void turnOffSecond() {
+
         piBaseService.turnOffSecond();
     }
 

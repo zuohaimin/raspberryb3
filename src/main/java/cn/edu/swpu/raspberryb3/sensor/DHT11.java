@@ -17,6 +17,7 @@ public class DHT11 {
     }
 
     public void getDHMessage() throws InterruptedException {
+        Thread.sleep(1000);
         while (true) {
             in.low();
             Thread.sleep(20);

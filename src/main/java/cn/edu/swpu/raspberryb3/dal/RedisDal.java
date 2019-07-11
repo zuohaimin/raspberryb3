@@ -21,7 +21,7 @@ public class RedisDal {
 //    private RedisTemplate<String,DHMessage> redisTemplate;
 
     @Autowired
-    private Stack<DHMessage> dhMessages;
+    private Stack<DHMessage> stack;
 
 
 
@@ -31,8 +31,8 @@ public class RedisDal {
      */
     public DHMessage save(DHMessage dhMessage){
         String key = KeyUtil.getRedisKey();
-        dhMessages.push(dhMessage);
-        return dhMessages.peek();
+        stack.push(dhMessage);
+        return stack.peek();
     }
 
 //    public Boolean delete(String key){
@@ -40,6 +40,6 @@ public class RedisDal {
 //    }
 //
     public DHMessage getDHMessage(String key){
-        return dhMessages.pop();
+        return stack.pop();
     }
 }

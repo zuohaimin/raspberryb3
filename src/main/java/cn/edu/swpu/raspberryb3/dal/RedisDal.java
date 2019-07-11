@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Stack;
+
 /**
  * @Author: 束手就擒
  * @Date: 19-7-8 下午5:09
@@ -15,8 +17,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisDal {
 
+//    @Autowired
+//    private RedisTemplate<String,DHMessage> redisTemplate;
+
     @Autowired
-    private RedisTemplate<String,DHMessage> redisTemplate;
+    private Stack<DHMessage> dhMessages;
 
 
 
@@ -26,15 +31,15 @@ public class RedisDal {
      */
     public DHMessage save(DHMessage dhMessage){
         String key = KeyUtil.getRedisKey();
-        redisTemplate.opsForList().leftPush(key,dhMessage);
-        return getDHMessage(key);
+        dhMessages.push(dhMessage);
+        return dhMessages.peek();
     }
 
-    public Boolean delete(String key){
-        return redisTemplate.delete(key);
-    }
-
+//    public Boolean delete(String key){
+//        return null;
+//    }
+//
     public DHMessage getDHMessage(String key){
-        return redisTemplate.opsForList().leftPop(key);
+        return dhMessages.pop();
     }
 }

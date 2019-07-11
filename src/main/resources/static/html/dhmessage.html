@@ -15,7 +15,9 @@
     <div id="main" style="width: 100%; height:800px; float: left;"></div>
 </div>
 <button id="save">开始采集温湿度</button>
-<button id="change">动态显示存储数量</button>
+<button id="change">动态显示温湿度数据</button>
+<button id="gas">启动气体传感器</button>
+<button id="voice">启动声音传感器</button>
 <script type="text/javascript">
     $("#save").click(function () {
         $.getJSON("/raspberry3/collectdhmessage", function (data) {
@@ -23,6 +25,20 @@
                 $("#save").text("正在存储数据");
             } else {
                 $.toast("请不要多次存储");
+            }
+        })
+    });
+    $("#gas").click(function () {
+        $.getJSON("/raspberry3/gassensor", function (data) {
+            if (data.status == "success") {
+                $("#gas").text("已启动气体传感器");
+            }
+        })
+    });
+    $("#voice").click(function () {
+        $.getJSON("/raspberry3/voicesensor", function (data) {
+            if (data.status == "success") {
+                $("#voice").text("已启动声音传感器");
             }
         })
     });

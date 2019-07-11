@@ -1,7 +1,6 @@
 package cn.edu.swpu.raspberryb3.service.impl;
 
 import com.pi4j.io.gpio.GpioPin;
-import com.pi4j.io.gpio.GpioPinDigital;
 import com.pi4j.io.gpio.GpioPinDigitalMultipurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +19,8 @@ public class DHMessageService2Impl {
     public DHMessageService2Impl(Map<String,GpioPin> gpioPinMap){
         this.dhSenser = (GpioPinDigitalMultipurpose) gpioPinMap.get("dhSenser");
     }
+
+
 
 
 

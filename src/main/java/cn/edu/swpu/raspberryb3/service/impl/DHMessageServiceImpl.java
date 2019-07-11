@@ -132,7 +132,11 @@ class DHMessageServiceImpl implements DHMessageService {
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-                dht11.getTemperature(7);
+                try {
+                    dht11.getDHMessage();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         thread.start();

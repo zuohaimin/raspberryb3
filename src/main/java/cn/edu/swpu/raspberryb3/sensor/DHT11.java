@@ -1,13 +1,23 @@
 package cn.edu.swpu.raspberryb3.sensor;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class DHT11 {
     private static final int    MAXTIMINGS  = 85;
     private final int[]         dht11_dat   = { 0, 0, 0, 0, 0 };
+
+    @Autowired
+    private GpioController gpioController;
 
     public DHT11() {
 
@@ -96,4 +106,70 @@ public class DHT11 {
 //        System.out.println("Done!!");
 //
 //    }
+
+    public void getDHMessage() throws InterruptedException {
+        while (true) {
+            GpioPinDigitalOutput pin = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_07);
+            pin.low();
+            Thread.sleep(2);
+            pin.high();
+            GpioPinDigitalInput in = gpioController.provisionDigitalInputPin(RaspiPin.GPIO_07);
+            while (in.isLow()) {
+                continue;
+            }
+            while (in.isHigh()) {
+                continue;
+            }
+            int j = 0;
+            int data[] = new int[40];
+            while (j < 40) {
+                int k = 0;
+                while (in.isLow()) {
+                    continue;
+                }
+                while (in.isHigh()) {
+                    k += 1;
+                    if (k > 100) {
+                        break;
+                    }
+                }
+                if (k < 8) {
+                    data[j] = 0;
+                } else {
+                    data[j] = 1;
+                }
+                j++;
+            }
+            System.out.println("sensor is working");
+            System.out.println(data.toString());
+
+            int humidity_bit[] = Arrays.copyOfRange(data, 0, 8);
+            int humidity_point_bit[] = Arrays.copyOfRange(data, 8, 16);
+            int temperature_bit[] = Arrays.copyOfRange(data, 16, 24);
+            int temperature_point_bit[] = Arrays.copyOfRange(data, 24, 32);
+            int check_bit[] = Arrays.copyOfRange(data, 32, 40);
+
+            int humidity = 0;
+            int humidity_point = 0;
+            int temperature = 0;
+            int temperature_point = 0;
+            int check = 0;
+
+            for (int i = 0; i < 8; i++) {
+                humidity += humidity_bit[i] * Math.pow(2, (7 - i));
+                humidity_point += humidity_point_bit[i] * Math.pow(2, (7 - i));
+                temperature += temperature_bit[i] * Math.pow(2, (7 - i));
+                temperature_point += temperature_point_bit[i] * Math.pow(2, (7 - i));
+                check += check_bit[i] * Math.pow(2, (7 - i));
+            }
+            int temp = humidity + humidity_point + temperature + temperature_point;
+            if (check == temp) {
+                System.out.println("temperature:" + temperature + " humidity:" + humidity);
+            } else {
+                System.out.println("Wrong");
+                System.out.println("temperature:" + temperature + " humidity:" + humidity + " check:" + check);
+            }
+            Thread.sleep(5000);
+        }
+    }
 }

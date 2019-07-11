@@ -16,7 +16,7 @@ class DHMessageServiceImpl implements DHMessageService {
     @Autowired
     private GpioController gpioController;
 
-    private final Pin DEFAULT_PIN = null;
+    private final Pin DEFAULT_PIN = RaspiPin.GPIO_07;
 
     private static AtomicInteger atomicInteger = new AtomicInteger();
 
@@ -41,7 +41,7 @@ class DHMessageServiceImpl implements DHMessageService {
         Thread thread = new Thread(() -> {
             while (true) {
                 GpioPinDigitalMultipurpose dht11 = gpioController.provisionDigitalMultipurposePin
-                        (DEFAULT_PIN, PinMode.DIGITAL_INPUT, PinPullResistance.PULL_UP);
+                        (DEFAULT_PIN, PinMode.DIGITAL_INPUT);
                 int data[] = new int[500];
                 dht11.setMode(PinMode.DIGITAL_OUTPUT);
 
@@ -54,6 +54,7 @@ class DHMessageServiceImpl implements DHMessageService {
                     e.printStackTrace();
                 }
                 dht11.setMode(PinMode.DIGITAL_INPUT);
+                dht11.setPullResistance(PinPullResistance.PULL_UP);
                 for (int i = 0; i < 500; i++) {
                     data[i] = dht11.getState().getValue();
                 }
@@ -128,6 +129,7 @@ class DHMessageServiceImpl implements DHMessageService {
                 }
             }
         });
+        thread.start();
         return true;
     }
 }

@@ -23,43 +23,15 @@ import java.util.Map;
 @Service
 public class PiVoiceServiceImpl implements PiVoiceService {
 
-//    private GpioPinDigitalInput voiceSenser;
-//
-//    private PiBaseService piBaseService;
-//
-//    @Autowired
-//    public PiVoiceServiceImpl(Map<String,GpioPin> gpioPinMap,
-//                              PiBaseService piBaseService){
-//        this.voiceSenser = (GpioPinDigitalInput) gpioPinMap.get("voiceSenser");
-//        this.piBaseService = piBaseService;
-//    }
-//    @Override
-//    public void getEdge() {
-//
-//        //去抖动
-//        voiceSenser.setDebounce(200);
-//        voiceSenser.addListener(new GpioPinListenerDigital() {
-//            @Override
-//            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-//                log.info(event.getPin()+ " : " + event.getState());
-//                piBaseService.turnOnSecond();
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                piBaseService.turnOffSecond();
-//            }
-//        });
-//    }
     private GpioPinDigitalInput voiceSenser;
 
-    private GpioPinDigitalOutput ledSecond;
+    private PiBaseService piBaseService;
 
     @Autowired
-    public PiVoiceServiceImpl(Map<String, GpioPin> gpioPinMap){
+    public PiVoiceServiceImpl(Map<String,GpioPin> gpioPinMap,
+                              PiBaseService piBaseService){
         this.voiceSenser = (GpioPinDigitalInput) gpioPinMap.get("voiceSenser");
-        this.ledSecond = (GpioPinDigitalOutput) gpioPinMap.get("ledSecond");
+        this.piBaseService = piBaseService;
     }
     @Override
     public void getEdge() {
@@ -70,14 +42,15 @@ public class PiVoiceServiceImpl implements PiVoiceService {
             @Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
                 log.info(event.getPin()+ " : " + event.getState());
-                ledSecond.high();
+                piBaseService.turnOnSecond();
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                ledSecond.low();
+                piBaseService.turnOffSecond();
             }
         });
     }
+
 }

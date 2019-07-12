@@ -20,7 +20,7 @@
 <button id="voice">启动声音传感器</button>
 <script type="text/javascript">
     $("#save").click(function () {
-        $.getJSON("/raspberry3/collectdhmessage", function (data) {
+        $.getJSON("http://localhost:8080/raspberry3/collectdhmessage", function (data) {
             if (data.status == "success") {
                 $("#save").text("正在存储数据");
             } else {
@@ -29,14 +29,14 @@
         })
     });
     $("#gas").click(function () {
-        $.getJSON("/raspberry3/gassensor", function (data) {
+        $.getJSON("http://localhost:8080/raspberry3/gassensor", function (data) {
             if (data.status == "success") {
                 $("#gas").text("已启动气体传感器");
             }
         })
     });
     $("#voice").click(function () {
-        $.getJSON("/raspberry3/voicesensor", function (data) {
+        $.getJSON("http://localhost:8080/raspberry3/voicesensor", function (data) {
             if (data.status == "success") {
                 $("#voice").text("已启动声音传感器");
             }
@@ -106,7 +106,7 @@
     myChart.setOption(mainOption);
     function start() {
 
-        $.ajax({url:"/raspberry3/dhmessage",
+        $.ajax({url:"http://localhost:8080/raspberry3/dhmessage",
             type:"get",
             datatype:"json",
             success:function (result) {

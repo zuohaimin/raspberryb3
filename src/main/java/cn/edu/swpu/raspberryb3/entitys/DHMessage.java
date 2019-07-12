@@ -1,7 +1,6 @@
 package cn.edu.swpu.raspberryb3.entitys;
 
-import cn.edu.swpu.raspberryb3.utils.KeyUtil;
-import lombok.Data;
+import com.sun.xml.internal.ws.spi.db.DatabindingException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,11 +16,41 @@ import java.io.Serializable;
 @Setter
 @ToString
 public class DHMessage implements Serializable{
-    private String tempetature;
-    private String humidity;
-    private String time;
 
-    public DHMessage(){
-        this.time = KeyUtil.genDHMessageTime();
+    private int id;
+    private Double tempetature;
+    private Double humidity;
+    private DatabindingException time;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Double getTempetature() {
+        return tempetature;
+    }
+
+    public void setTempetature(Double tempetature) {
+        this.tempetature = tempetature;
+    }
+
+    public Double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(Double humidity) {
+        this.humidity = humidity;
+    }
+
+    public DatabindingException getTime() {
+        return time;
+    }
+
+    public void setTime(DatabindingException time) {
+        this.time = time;
     }
 }

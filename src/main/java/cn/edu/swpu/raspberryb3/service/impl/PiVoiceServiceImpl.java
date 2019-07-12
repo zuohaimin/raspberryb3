@@ -5,6 +5,7 @@ import cn.edu.swpu.raspberryb3.service.PiVoiceService;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import lombok.extern.slf4j.Slf4j;
@@ -42,13 +43,15 @@ public class PiVoiceServiceImpl implements PiVoiceService {
             @Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
                 log.info(event.getPin()+ " : " + event.getState());
-                piBaseService.turnOnSecond();
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(PinState.LOW.equals(event.getState())) {
+                    piBaseService.turnOnSecond();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    piBaseService.turnOffSecond();
                 }
-                piBaseService.turnOffSecond();
             }
         });
     }

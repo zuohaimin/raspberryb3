@@ -42,7 +42,7 @@ public class PiVoiceServiceImpl implements PiVoiceService {
             @Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
                 log.info(event.getPin()+ " : " + event.getState());
-                if(PinState.LOW.equals(event.getState())){
+                if(PinState.LOW.equals(event.getState())) {
                     piBaseService.turnOnSecond();
                     try {
                         Thread.sleep(5000);

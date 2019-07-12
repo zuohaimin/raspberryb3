@@ -37,7 +37,7 @@ public class PiVoiceServiceImpl implements PiVoiceService {
     public void getEdge() {
 
         //去抖动
-        voiceSenser.setDebounce(500);
+        voiceSenser.setDebounce(200);
         voiceSenser.addListener(new GpioPinListenerDigital() {
             @Override
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {

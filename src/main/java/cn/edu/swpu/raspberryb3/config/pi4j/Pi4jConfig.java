@@ -37,9 +37,9 @@ public class Pi4jConfig {
         Map<String,GpioPin> gpioPinMap = new HashMap<>();
 
         gpioPinMap.put("led_1",gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_00, PinState.LOW));
-        gpioPinMap.put("gasSenser",gpioController.provisionDigitalInputPin(RaspiPin.GPIO_01, PinPullResistance.PULL_DOWN));
-        gpioPinMap.put("voiceSenser",gpioController.provisionDigitalInputPin(RaspiPin.GPIO_02,PinPullResistance.PULL_DOWN));
-        gpioPinMap.put("dhSenser",gpioController.provisionDigitalMultipurposePin(RaspiPin.GPIO_07,PinMode.DIGITAL_OUTPUT, PinPullResistance.PULL_DOWN));
+        gpioPinMap.put("gasSenser",gpioController.provisionDigitalInputPin(RaspiPin.GPIO_01, PinPullResistance.PULL_UP));
+        gpioPinMap.put("voiceSenser",gpioController.provisionDigitalInputPin(RaspiPin.GPIO_02,PinPullResistance.PULL_UP));
+        gpioPinMap.put("dhSenser",gpioController.provisionDigitalMultipurposePin(RaspiPin.GPIO_03,PinMode.DIGITAL_OUTPUT, PinPullResistance.PULL_DOWN));
         gpioPinMap.put("led_2",gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_04,PinState.LOW));
         gpioPinMap.put("buzzer",gpioController.provisionPwmOutputPin(RaspiPin.GPIO_23));
         return gpioPinMap;
